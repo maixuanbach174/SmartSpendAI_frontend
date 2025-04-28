@@ -16,6 +16,7 @@ import { Modal } from "@/components/ui/modal";
 interface CalendarEvent extends EventInput {
   extendedProps: {
     calendar: string;
+    spend?: number;
   };
 }
 
@@ -24,9 +25,10 @@ const Calendar: React.FC = () => {
     null
   );
   const [eventTitle, setEventTitle] = useState("");
-  const [eventStartDate, setEventStartDate] = useState("");
+  const [eventSpending, setEventSpending] = useState<number>(0);  const [eventStartDate, setEventStartDate] = useState("");
   const [eventEndDate, setEventEndDate] = useState("");
   const [eventLevel, setEventLevel] = useState("");
+  const [eventSchedule, setEventSchedule] = useState("none");
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const calendarRef = useRef<FullCalendar>(null);
   const { isOpen, openModal, closeModal } = useModal();
@@ -74,8 +76,10 @@ const Calendar: React.FC = () => {
     const event = clickInfo.event;
     setSelectedEvent(event as unknown as CalendarEvent);
     setEventTitle(event.title);
+    setEventSpending(event.extendedProps.spend);
     setEventStartDate(event.start?.toISOString().split("T")[0] || "");
     setEventEndDate(event.end?.toISOString().split("T")[0] || "");
+    setEventSchedule(event.extendedProps.schedule || "none");
     setEventLevel(event.extendedProps.calendar);
     openModal();
   };
@@ -89,9 +93,11 @@ const Calendar: React.FC = () => {
             ? {
                 ...event,
                 title: eventTitle,
+                spending: eventSpending,
                 start: eventStartDate,
                 end: eventEndDate,
-                extendedProps: { calendar: eventLevel },
+                schedule: eventSchedule,
+                extendedProps: { calendar: eventLevel, spend: eventSpending },
               }
             : event
         )
@@ -101,10 +107,12 @@ const Calendar: React.FC = () => {
       const newEvent: CalendarEvent = {
         id: Date.now().toString(),
         title: eventTitle,
+        spending: eventSpending,
         start: eventStartDate,
         end: eventEndDate,
+        schedule: eventSchedule,
         allDay: true,
-        extendedProps: { calendar: eventLevel },
+        extendedProps: { calendar: eventLevel, spend: eventSpending },
       };
       setEvents((prevEvents) => [...prevEvents, newEvent]);
     }
@@ -114,10 +122,22 @@ const Calendar: React.FC = () => {
 
   const resetModalFields = () => {
     setEventTitle("");
+    setEventSpending(0);
     setEventStartDate("");
     setEventEndDate("");
+    setEventSchedule("none");
     setEventLevel("");
     setSelectedEvent(null);
+  };
+
+  const handleEventDelete = () => {
+    if (selectedEvent) {
+      setEvents((prevEvents) => 
+        prevEvents.filter((event) => event.id !== selectedEvent.id)
+      );
+      closeModal();
+      resetModalFields();
+    }
   };
 
   return (
@@ -173,6 +193,24 @@ const Calendar: React.FC = () => {
                   onChange={(e) => setEventTitle(e.target.value)}
                   className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
                 />
+              </div>
+            </div>
+            <div className="mt-6">
+              <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                Spending Amount
+              </label>
+              <div className="relative">
+                <input
+                  id="event-spending"
+                  type="number"
+                  value={eventSpending}
+                  onChange={(e) => setEventSpending(parseFloat(e.target.value))}
+                  placeholder="0.0"
+                  className="dark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pl-4 pr-11 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                />
+                <div className="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none">
+                  <span className="text-gray-500 dark:text-gray-400">$</span>
+                </div>
               </div>
             </div>
             <div className="mt-6">
@@ -244,6 +282,22 @@ const Calendar: React.FC = () => {
                 />
               </div>
             </div>
+            <div className="mt-6">
+              <label htmlFor="eventSchedule" className="form-label">
+                Schedule
+              </label>
+              <select
+                id="eventSchedule"
+                className="form-select"
+                value={eventSchedule}
+                onChange={(e) => setEventSchedule(e.target.value)}
+              >
+                <option value="none">None</option>
+                <option value="daily">Daily</option>
+                <option value="monthly">Monthly</option>
+                <option value="yearly">Yearly</option>
+              </select>
+            </div>
           </div>
           <div className="flex items-center gap-3 mt-6 modal-footer sm:justify-end">
             <button
@@ -253,6 +307,15 @@ const Calendar: React.FC = () => {
             >
               Close
             </button>
+            {selectedEvent && (
+              <button
+                onClick={handleEventDelete}
+                type="button"
+                className="flex w-full justify-center rounded-lg border border-red-500 bg-white px-4 py-2.5 text-sm font-medium text-red-500 hover:bg-red-50 dark:border-red-700 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-white/[0.03] sm:w-auto"
+              >
+                Delete Event
+              </button>
+            )}
             <button
               onClick={handleAddOrUpdateEvent}
               type="button"
@@ -269,13 +332,21 @@ const Calendar: React.FC = () => {
 
 const renderEventContent = (eventInfo: EventContentArg) => {
   const colorClass = `fc-bg-${eventInfo.event.extendedProps.calendar.toLowerCase()}`;
+  const spending = eventInfo.event.extendedProps.spend || "";
   return (
     <div
-      className={`event-fc-color flex fc-event-main ${colorClass} p-1 rounded-sm`}
+      className={`event-fc-color flex flex-col fc-event-main ${colorClass} p-1 rounded-sm`}
     >
-      <div className="fc-daygrid-event-dot"></div>
-      <div className="fc-event-time">{eventInfo.timeText}</div>
-      <div className="fc-event-title">{eventInfo.event.title}</div>
+      <div className="flex">
+        <div className="fc-daygrid-event-dot"></div>
+        <div className="fc-event-time">{eventInfo.timeText}</div>
+        <div className="fc-event-title">{eventInfo.event.title}</div>
+      </div>
+      {spending !== undefined && (
+        <div className="text-xs mt-1 font-medium text-black">
+          ${Number(spending).toFixed(2)}
+        </div>
+      )}
     </div>
   );
 };
