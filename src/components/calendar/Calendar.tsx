@@ -54,7 +54,7 @@ const Calendar: React.FC = () => {
     const mappedEvents = CalendarData.map((event) => ({
       id: event.id.toString(),
       title: event.title,
-      start: new Date(event.start || "").toISOString(),
+      start: new Date(event.start || "").toISOString().split('T')[0],
       extendedProps: {
         calendar: calendarsEvents[event.type as CalendarEventType],
         spend: event.spending,
@@ -169,8 +169,8 @@ const Calendar: React.FC = () => {
       }, 20000);
     } else {
       // Stop recording logic would go here
-      console.log("Stopped recording");
       setAudioTranscript("");
+      handleStopRecording();
     }
   };
 
@@ -188,6 +188,33 @@ const Calendar: React.FC = () => {
         {isRecording && <VoiceWaveAnimation />}
       </div>
     );
+  };
+
+  const mockAIEvent = {
+    "title": "Dating",
+    "spending": 50,
+    "start": new Date("2025-05-01").toISOString().split('T')[0],
+    "type": "Others"
+  }
+
+  // Function to fill modal with AI event data
+  const fillModalWithAIData = () => {
+    setEventTitle(mockAIEvent.title);
+    setEventSpending(mockAIEvent.spending);
+    setEventStartDate(mockAIEvent.start);
+    setEventEndDate(mockAIEvent.start);
+    setEventType(mockAIEvent.type as CalendarEventType);
+    setEventSchedule("none");
+    setSelectedEvent(null);
+    console.log(eventStartDate);
+  };
+
+  // Function to handle recording stop
+  const handleStopRecording = () => {
+    setIsRecording(false);
+    closeModal();
+    fillModalWithAIData();
+    openModal();
   };
 
   return (
