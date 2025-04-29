@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { EcommerceMetricsDynamic } from "@/components/ecommerce/EcommerceMetrics";
+import EcommerceMetricsDynamic from "@/components/ecommerce/EcommerceMetrics";
 import React from "react";
 import MonthlyTarget from "@/components/ecommerce/MonthlyTarget";
 import MonthlySalesChart from "@/components/ecommerce/MonthlySalesChart";

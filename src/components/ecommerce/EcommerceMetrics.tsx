@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Badge from "../ui/badge/Badge";
 import { ArrowDownIcon, ArrowUpIcon } from "@/icons";
 import { useTransactionDate } from "./TransactionDateContext";
@@ -70,45 +70,61 @@ const ExpenseCard: React.FC<CardProps> = ({ emoji, label, amount, changeRate, ch
   </div>
 );
 
-export const EcommerceMetricsDynamic: React.FC = () => {
+export default function EcommerceMetricsDynamic() {
   const { selectedDate } = useTransactionDate();
 
-  const expenseItems = useMemo(
-    () => generateByType(selectedDate, "expense"),
-    [selectedDate]
+  // ① guard so we only generate random data after hydration
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
+
+  // ② only compute these once mounted
+  const expenseTxs = useMemo(
+    () => (mounted ? generateByType(selectedDate, "expense") : []),
+    [mounted, selectedDate]
   );
-  const revenueItems = useMemo(
-    () => generateByType(selectedDate, "revenue"),
-    [selectedDate]
+  const revenueTxs = useMemo(
+    () => (mounted ? generateByType(selectedDate, "revenue") : []),
+    [mounted, selectedDate]
   );
 
-  const totalExpense = expenseItems.reduce((s, t) => s + t.amount, 0);
-  const totalRevenue = revenueItems.reduce((s, t) => s + t.amount, 0);
+  // ③ if not yet mounted, render an identical “empty” placeholder
+  if (!mounted) {
+    return (
+      <div className="space-y-4">
+        <div className="h-[140px] rounded-2xl border border-gray-200 bg-white animate-pulse" />
+        <div className="h-[140px] rounded-2xl border border-gray-200 bg-white animate-pulse" />
+      </div>
+    );
+  }
 
+  // ④ now it’s safe to compute totals & render cards
+  const sum = (arr: any[]) => arr.reduce((s, t) => s + t.amount, 0);
+  const totalExpense = sum(expenseTxs);
+  const totalRevenue = sum(revenueTxs);
+
+  // compare to previous month…
   const prev = new Date(selectedDate);
   prev.setMonth(prev.getMonth() - 1);
-  const prevExpense = generateByType(prev, "expense").reduce((s, t) => s + t.amount, 0);
-  const prevRevenue = generateByType(prev, "revenue").reduce((s, t) => s + t.amount, 0);
-
-  const fmt = (curr: number, prevVal: number) =>
-    prevVal > 0 ? `${(((curr - prevVal) / prevVal) * 100).toFixed(1)}%` : "—";
+  const prevExpense = sum(generateByType(prev, "expense"));
+  const prevRevenue = sum(generateByType(prev, "revenue"));
+  const pct = (curr: number, prv: number) => (prv>0?`${(((curr-prv)/prv)*100).toFixed(1)}%`:"—");
 
   return (
-    <div className="flex flex-col gap-4 md:gap-6">
+    <div className="flex flex-col gap-4">
       <ExpenseCard
         emoji="💸"
         label="Expenses"
         amount={totalExpense}
-        changeRate={fmt(totalExpense, prevExpense)}
+        changeRate={pct(totalExpense, prevExpense)}
         changeType={totalExpense >= prevExpense ? "up" : "down"}
       />
       <ExpenseCard
         emoji="💰"
         label="Revenue"
         amount={totalRevenue}
-        changeRate={fmt(totalRevenue, prevRevenue)}
+        changeRate={pct(totalRevenue, prevRevenue)}
         changeType={totalRevenue >= prevRevenue ? "up" : "down"}
       />
     </div>
   );
-};
+}
