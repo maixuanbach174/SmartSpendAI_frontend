@@ -1,15 +1,24 @@
 "use client";
-import React from "react";
-
+import React, { useState } from "react";
 import { ApexOptions } from "apexcharts";
-
 import dynamic from "next/dynamic";
+import { AnalyticsData } from "@/mock";
+
 // Dynamically import the ReactApexChart component
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
 
 export default function BarChartOne() {
+  const [selectedYear, setSelectedYear] = useState(2024);
+
+  // Filter data for the selected year
+  const filteredData = AnalyticsData.filter((data) => data.year === selectedYear);
+
+  // Extract months and total values for the chart
+  const months = filteredData.map((data) => data.month);
+  const totals = filteredData.map((data) => data.total);
+
   const options: ApexOptions = {
     colors: ["#465fff"],
     chart: {
@@ -37,72 +46,41 @@ export default function BarChartOne() {
       colors: ["transparent"],
     },
     xaxis: {
-      categories: [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ],
-      axisBorder: {
-        show: false,
-      },
-      axisTicks: {
-        show: false,
-      },
-    },
-    legend: {
-      show: true,
-      position: "top",
-      horizontalAlign: "left",
-      fontFamily: "Outfit",
+      categories: months, // Use months as categories
     },
     yaxis: {
       title: {
-        text: undefined,
+        text: "Total Spending ($)",
       },
     },
-    grid: {
-      yaxis: {
-        lines: {
-          show: true,
-        },
-      },
-    },
-    fill: {
-      opacity: 1,
-    },
-
     tooltip: {
-      x: {
-        show: false,
-      },
       y: {
-        formatter: (val: number) => `${val}`,
+        formatter: (val: number) => `$${val}`,
       },
     },
   };
-  const series = [
-    {
-      name: "Sales",
-      data: [168, 385, 201, 298, 187, 195, 291, 110, 215, 390, 280, 112],
-    },
-  ];
+
   return (
     <div className="max-w-full overflow-x-auto custom-scrollbar">
-      <div id="chartOne" className="min-w-[1000px]">
+      <div className="flex items-center gap-4 mb-4">
+        <select
+          value={selectedYear}
+          onChange={(e) => setSelectedYear(parseInt(e.target.value, 10))}
+          className="form-select border border-gray-300 rounded-md p-2 text-sm focus:outline-none"
+        >
+          {[2024, 2025].map((year) => (
+            <option key={year} value={year}>
+              {year}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div id="chartBar" className="min-w-[300px]">
         <ReactApexChart
           options={options}
-          series={series}
+          series={[{ name: "Total Spending", data: totals }]} // Use totals as data
           type="bar"
-          height={180}
+          height={350}
         />
       </div>
     </div>

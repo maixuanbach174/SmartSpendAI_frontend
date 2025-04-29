@@ -1,4 +1,6 @@
 import BarChartOne from "@/components/charts/bar/BarChartOne";
+import LineChartOne from "@/components/charts/line/LineChartOne";
+import PieChartOne from "@/components/charts/pie/PieChartOne";
 import ComponentCard from "@/components/common/ComponentCard";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import { Metadata } from "next";
@@ -19,6 +21,11 @@ export default function page() {
           <BarChartOne />
         </ComponentCard>
       </div>
+        <div className="space-y-6">
+            <ComponentCard title="Pie Chart 1">
+            <PieChartOne />
+            </ComponentCard>
+        </div>
     </div>
   );
 }

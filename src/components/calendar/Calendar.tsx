@@ -13,6 +13,8 @@ import {
 import { useModal } from "@/hooks/useModal";
 import { Modal } from "@/components/ui/modal";
 
+import { MicroPhoneIcon } from "@/icons";
+
 interface CalendarEvent extends EventInput {
   extendedProps: {
     calendar: string;
@@ -35,6 +37,9 @@ const Calendar: React.FC = () => {
   const calendarRef = useRef<FullCalendar>(null);
   const { isOpen, openModal, closeModal } = useModal();
 
+  const [isRecording, setIsRecording] = useState(false);
+  const [audioTranscript, setAudioTranscript] = useState("");
+
   const calendarsEvents = {
     Transportation: "danger",
     Food: "success",
@@ -49,20 +54,20 @@ const Calendar: React.FC = () => {
         id: "1",
         title: "Event Conf.",
         start: new Date().toISOString().split("T")[0],
-        extendedProps: { calendar: "Danger" },
+        extendedProps: { calendar: "Danger", spend: 100 },
       },
       {
         id: "2",
         title: "Meeting",
         start: new Date(Date.now() + 86400000).toISOString().split("T")[0],
-        extendedProps: { calendar: "Success" },
+        extendedProps: { calendar: "Success", spend: 50 },
       },
       {
         id: "3",
         title: "Workshop",
         start: new Date(Date.now() + 172800000).toISOString().split("T")[0],
         end: new Date(Date.now() + 259200000).toISOString().split("T")[0],
-        extendedProps: { calendar: "Primary" },
+        extendedProps: { calendar: "Primary", spend: 20 },
       },
     ]);
   }, []);
@@ -139,6 +144,59 @@ const Calendar: React.FC = () => {
       closeModal();
       resetModalFields();
     }
+  };
+
+  // Create wave animation component
+  const VoiceWaveAnimation = () => {
+    return (
+      <div className="flex items-center gap-1 ml-2">
+        {[1, 2, 3, 4, 5].map((bar) => (
+          <div 
+            key={bar}
+            className="w-1 bg-blue-500 rounded-full animate-pulse"
+            style={{
+              height: `${Math.max(12, Math.floor(Math.random() * 24))}px`,
+              animationDelay: `${bar * 0.1}s`
+            }}
+          />
+        ))}
+      </div>
+    );
+  };
+
+  // Function to handle voice recording
+  const handleVoiceRecording = () => {
+    setIsRecording(prev => !prev);
+    
+    if (!isRecording) {
+      // Start recording logic would go here
+      console.log("Started recording");
+      // Mock transcript after a delay
+      setTimeout(() => {
+        setAudioTranscript("Meeting with client on Thursday at 2pm - $50 lunch budget");
+        setIsRecording(false);
+      }, 20000);
+    } else {
+      // Stop recording logic would go here
+      console.log("Stopped recording");
+      setAudioTranscript("");
+    }
+  };
+
+  // Microphone button component
+  const MicrophoneButton = () => {
+    return (
+      <div className="flex items-center">
+        <button
+          onClick={handleVoiceRecording}
+          className={`p-2 rounded-full ${isRecording ? 'bg-red-500' : 'bg-gray-200 hover:bg-gray-300'} transition-colors flex items-center justify-center`}
+          aria-label={isRecording ? "Stop recording" : "Start recording"}
+        >
+          <MicroPhoneIcon className={`w-5 h-5 ${isRecording ? 'text-white' : 'text-gray-700'}`} />
+        </button>
+        {isRecording && <VoiceWaveAnimation />}
+      </div>
+    );
   };
 
   return (
@@ -317,6 +375,7 @@ const Calendar: React.FC = () => {
                 Delete Event
               </button>
             )}
+            <MicrophoneButton />
             <button
               onClick={handleAddOrUpdateEvent}
               type="button"

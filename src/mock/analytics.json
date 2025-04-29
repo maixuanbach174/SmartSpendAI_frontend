@@ -1,0 +1,164 @@
+[
+    {
+        "month": "January",
+        "year": 2024,
+        "transportation": 300,
+        "food": 500,
+        "personal": 200,
+        "others": 100,
+        "total": 1100
+    },
+    {
+        "month": "February",
+        "year": 2024,
+        "transportation": 350,
+        "food": 450,
+        "personal": 250,
+        "others": 150,
+        "total": 1200
+    },
+    {
+        "month": "March",
+        "year": 2024,
+        "transportation": 400,
+        "food": 600,
+        "personal": 300,
+        "others": 200,
+        "total": 1500
+    },
+    {
+        "month": "April",
+        "year": 2024,
+        "transportation": 450,
+        "food": 550,
+        "personal": 350,
+        "others": 250,
+        "total": 1700
+    },
+    {
+        "month": "May",
+        "year": 2024,
+        "transportation": 500,
+        "food": 600,
+        "personal": 400,
+        "others": 300,
+        "total": 2000
+    },
+    {
+        "month": "June",
+        "year": 2024,
+        "transportation": 550,
+        "food": 650,
+        "personal": 450,
+        "others": 350,
+        "total": 2300
+    },
+    {
+        "month": "July",
+        "year": 2024,
+        "transportation": 600,
+        "food": 700,
+        "personal": 500,
+        "others": 400,
+        "total": 2600
+    },
+    {
+        "month": "August",
+        "year": 2024,
+        "transportation": 650,
+        "food": 750,
+        "personal": 550,
+        "others": 450,
+        "total": 2900
+    },
+    {
+        "month": "September",
+        "year": 2024,
+        "transportation": 700,
+        "food": 800,
+        "personal": 600,
+        "others": 500,
+        "total": 3200
+    },
+    {
+        "month": "October",
+        "year": 2024,
+        "transportation": 750,
+        "food": 850,
+        "personal": 650,
+        "others": 550,
+        "total": 3500
+    },
+    {
+        "month": "November",
+        "year": 2024,
+        "transportation": 800,
+        "food": 900,
+        "personal": 700,
+        "others": 600,
+        "total": 3800
+    },
+    {
+        "month": "December",
+        "year": 2024,
+        "transportation": 850,
+        "food": 950,
+        "personal": 750,
+        "others": 650,
+        "total": 4100
+    },
+    {
+        "month": "January",
+        "year": 2025,
+        "transportation": 900,
+        "food": 1000,
+        "personal": 800,
+        "others": 700,
+        "total": 4400
+    },
+    {
+        "month": "February",
+        "year": 2025,
+        "transportation": 950,
+        "food": 1050,
+        "personal": 850,
+        "others": 750,
+        "total": 4700
+    },
+    {
+        "month": "March",
+        "year": 2025,
+        "transportation": 1000,
+        "food": 1100,
+        "personal": 900,
+        "others": 800,
+        "total": 5000
+    },
+    {
+        "month": "April",
+        "year": 2025,
+        "transportation": 1050,
+        "food": 1150,
+        "personal": 950,
+        "others": 850,
+        "total": 5300
+    },
+    {
+        "month": "May",
+        "year": 2025,
+        "transportation": 1100,
+        "food": 1200,
+        "personal": 1000,
+        "others": 900,
+        "total": 5600
+    },
+    {
+        "month": "June",
+        "year": 2025,
+        "transportation": 1150,
+        "food": 1250,
+        "personal": 1050,
+        "others": 950,
+        "total": 5900
+    }
+]
