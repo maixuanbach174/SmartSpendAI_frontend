@@ -13,9 +13,14 @@ import {
 import { useModal } from "@/hooks/useModal";
 import { Modal } from "@/components/ui/modal";
 
+import { MicroPhoneIcon } from "@/icons";
+
+import { CalendarData } from "@/mock";
+
 interface CalendarEvent extends EventInput {
   extendedProps: {
     calendar: string;
+    spend?: number;
   };
 }
 
@@ -23,44 +28,39 @@ const Calendar: React.FC = () => {
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(
     null
   );
+
+  type CalendarEventType = 'Transportation' | 'Food' | 'Personal' | 'Others';
   const [eventTitle, setEventTitle] = useState("");
-  const [eventStartDate, setEventStartDate] = useState("");
+  const [eventSpending, setEventSpending] = useState<number>(0);  const [eventStartDate, setEventStartDate] = useState("");
   const [eventEndDate, setEventEndDate] = useState("");
-  const [eventLevel, setEventLevel] = useState("");
+  const [eventType, setEventType] = useState<CalendarEventType | ''>("");
+  const [eventSchedule, setEventSchedule] = useState("none");
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const calendarRef = useRef<FullCalendar>(null);
   const { isOpen, openModal, closeModal } = useModal();
 
+  const [isRecording, setIsRecording] = useState(false);
+  const [audioTranscript, setAudioTranscript] = useState("");
+
   const calendarsEvents = {
-    Danger: "danger",
-    Success: "success",
-    Primary: "primary",
-    Warning: "warning",
+    Transportation: "danger",
+    Food: "success",
+    Personal: "primary",
+    Others: "warning",
   };
 
   useEffect(() => {
     // Initialize with some events
-    setEvents([
-      {
-        id: "1",
-        title: "Event Conf.",
-        start: new Date().toISOString().split("T")[0],
-        extendedProps: { calendar: "Danger" },
+    const mappedEvents = CalendarData.map((event) => ({
+      id: event.id.toString(),
+      title: event.title,
+      start: new Date(event.start || "").toISOString(),
+      extendedProps: {
+        calendar: calendarsEvents[event.type as CalendarEventType],
+        spend: event.spending,
       },
-      {
-        id: "2",
-        title: "Meeting",
-        start: new Date(Date.now() + 86400000).toISOString().split("T")[0],
-        extendedProps: { calendar: "Success" },
-      },
-      {
-        id: "3",
-        title: "Workshop",
-        start: new Date(Date.now() + 172800000).toISOString().split("T")[0],
-        end: new Date(Date.now() + 259200000).toISOString().split("T")[0],
-        extendedProps: { calendar: "Primary" },
-      },
-    ]);
+    }));
+    setEvents(mappedEvents);
   }, []);
 
   const handleDateSelect = (selectInfo: DateSelectArg) => {
@@ -74,9 +74,11 @@ const Calendar: React.FC = () => {
     const event = clickInfo.event;
     setSelectedEvent(event as unknown as CalendarEvent);
     setEventTitle(event.title);
-    setEventStartDate(event.start?.toISOString().split("T")[0] || "");
-    setEventEndDate(event.end?.toISOString().split("T")[0] || "");
-    setEventLevel(event.extendedProps.calendar);
+    setEventSpending(event.extendedProps.spend);
+    setEventStartDate(event.startStr || event.start?.toISOString().split('T')[0] || '');
+    setEventEndDate(event.endStr || event.end?.toISOString().split('T')[0] || event.startStr || event.start?.toISOString().split('T')[0] || '');
+    setEventSchedule(event.extendedProps.schedule || "none");
+    setEventType(event.extendedProps.calendar);
     openModal();
   };
 
@@ -89,9 +91,10 @@ const Calendar: React.FC = () => {
             ? {
                 ...event,
                 title: eventTitle,
+                spending: eventSpending,
                 start: eventStartDate,
                 end: eventEndDate,
-                extendedProps: { calendar: eventLevel },
+                extendedProps: { calendar: eventType ? calendarsEvents[eventType as CalendarEventType] : 'Others', spend: eventSpending },
               }
             : event
         )
@@ -101,10 +104,12 @@ const Calendar: React.FC = () => {
       const newEvent: CalendarEvent = {
         id: Date.now().toString(),
         title: eventTitle,
+        spending: eventSpending,
         start: eventStartDate,
         end: eventEndDate,
+        schedule: eventSchedule,
         allDay: true,
-        extendedProps: { calendar: eventLevel },
+        extendedProps: { calendar: eventType ? calendarsEvents[eventType as CalendarEventType] : 'Others', spend: eventSpending },
       };
       setEvents((prevEvents) => [...prevEvents, newEvent]);
     }
@@ -114,15 +119,80 @@ const Calendar: React.FC = () => {
 
   const resetModalFields = () => {
     setEventTitle("");
+    setEventSpending(0);
     setEventStartDate("");
     setEventEndDate("");
-    setEventLevel("");
+    setEventSchedule("none");
+    setEventType("");
     setSelectedEvent(null);
+  };
+
+  const handleEventDelete = () => {
+    if (selectedEvent) {
+      setEvents((prevEvents) => 
+        prevEvents.filter((event) => event.id !== selectedEvent.id)
+      );
+      closeModal();
+      resetModalFields();
+    }
+  };
+
+  // Create wave animation component
+  const VoiceWaveAnimation = () => {
+    return (
+      <div className="flex items-center gap-1 ml-2">
+        {[1, 2, 3, 4, 5].map((bar) => (
+          <div 
+            key={bar}
+            className="w-1 bg-blue-500 rounded-full animate-pulse"
+            style={{
+              height: `${Math.max(12, Math.floor(Math.random() * 24))}px`,
+              animationDelay: `${bar * 0.1}s`
+            }}
+          />
+        ))}
+      </div>
+    );
+  };
+
+  // Function to handle voice recording
+  const handleVoiceRecording = () => {
+    setIsRecording(prev => !prev);
+    
+    if (!isRecording) {
+      // Start recording logic would go here
+      console.log("Started recording");
+      // Mock transcript after a delay
+      setTimeout(() => {
+        setAudioTranscript("Meeting with client on Thursday at 2pm - $50 lunch budget");
+        setIsRecording(false);
+      }, 20000);
+    } else {
+      // Stop recording logic would go here
+      console.log("Stopped recording");
+      setAudioTranscript("");
+    }
+  };
+
+  // Microphone button component
+  const MicrophoneButton = () => {
+    return (
+      <div className="flex items-center">
+        <button
+          onClick={handleVoiceRecording}
+          className={`p-2 rounded-full ${isRecording ? 'bg-red-500' : 'bg-gray-200 hover:bg-gray-300'} transition-colors flex items-center justify-center`}
+          aria-label={isRecording ? "Stop recording" : "Start recording"}
+        >
+          <MicroPhoneIcon className={`w-5 h-5 ${isRecording ? 'text-white' : 'text-gray-700'}`} />
+        </button>
+        {isRecording && <VoiceWaveAnimation />}
+      </div>
+    );
   };
 
   return (
     <div className="rounded-2xl border  border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
-      <div className="custom-calendar">
+      <div className="custom-calendar hide-scrollbar">
         <FullCalendar
           ref={calendarRef}
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
@@ -176,6 +246,24 @@ const Calendar: React.FC = () => {
               </div>
             </div>
             <div className="mt-6">
+              <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                Spending Amount
+              </label>
+              <div className="relative">
+                <input
+                  id="event-spending"
+                  type="number"
+                  value={eventSpending}
+                  onChange={(e) => setEventSpending(parseFloat(e.target.value))}
+                  placeholder="0.0"
+                  className="dark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pl-4 pr-11 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                />
+                <div className="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none">
+                  <span className="text-gray-500 dark:text-gray-400">$</span>
+                </div>
+              </div>
+            </div>
+            <div className="mt-6">
               <label className="block mb-4 text-sm font-medium text-gray-700 dark:text-gray-400">
                 Event Color
               </label>
@@ -196,13 +284,13 @@ const Calendar: React.FC = () => {
                             name="event-level"
                             value={key}
                             id={`modal${key}`}
-                            checked={eventLevel === key}
-                            onChange={() => setEventLevel(key)}
+                            checked={eventType === key}
+                            onChange={() => setEventType(key as CalendarEventType)}
                           />
                           <span className="flex items-center justify-center w-5 h-5 mr-2 border border-gray-300 rounded-full box dark:border-gray-700">
                             <span
                               className={`h-2 w-2 rounded-full bg-white ${
-                                eventLevel === key ? "block" : "hidden"
+                                eventType === key ? "block" : "hidden"
                               }`}  
                             ></span>
                           </span>
@@ -244,6 +332,22 @@ const Calendar: React.FC = () => {
                 />
               </div>
             </div>
+            <div className="mt-6">
+              <label htmlFor="eventSchedule" className="form-label">
+                Schedule
+              </label>
+              <select
+                id="eventSchedule"
+                className="form-select"
+                value={eventSchedule}
+                onChange={(e) => setEventSchedule(e.target.value)}
+              >
+                <option value="none">None</option>
+                <option value="daily">Daily</option>
+                <option value="monthly">Monthly</option>
+                <option value="yearly">Yearly</option>
+              </select>
+            </div>
           </div>
           <div className="flex items-center gap-3 mt-6 modal-footer sm:justify-end">
             <button
@@ -253,6 +357,16 @@ const Calendar: React.FC = () => {
             >
               Close
             </button>
+            {selectedEvent && (
+              <button
+                onClick={handleEventDelete}
+                type="button"
+                className="flex w-full justify-center rounded-lg border border-red-500 bg-white px-4 py-2.5 text-sm font-medium text-red-500 hover:bg-red-50 dark:border-red-700 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-white/[0.03] sm:w-auto"
+              >
+                Delete Event
+              </button>
+            )}
+            <MicrophoneButton />
             <button
               onClick={handleAddOrUpdateEvent}
               type="button"
@@ -269,13 +383,25 @@ const Calendar: React.FC = () => {
 
 const renderEventContent = (eventInfo: EventContentArg) => {
   const colorClass = `fc-bg-${eventInfo.event.extendedProps.calendar.toLowerCase()}`;
+  const spending = eventInfo.event.extendedProps.spend || "";
   return (
     <div
-      className={`event-fc-color flex fc-event-main ${colorClass} p-1 rounded-sm`}
+      className={`event-fc-color flex flex-col fc-event-main ${colorClass} p-1 rounded-sm`}
     >
-      <div className="fc-daygrid-event-dot"></div>
-      <div className="fc-event-time">{eventInfo.timeText}</div>
-      <div className="fc-event-title">{eventInfo.event.title}</div>
+      <div className="flex">
+        <div className="fc-daygrid-event-dot"></div>
+        {/* <div className="fc-event-time">{eventInfo.timeText}</div> */}
+        <div className="fc-event-title break-words whitespace-normal overflow-wrap-anywhere" style={{ 
+          overflow: "hidden", 
+          maxHeight: "3rem",
+          lineHeight: "1rem"
+        }}>{eventInfo.event.title}</div>
+      </div>
+      {spending !== undefined && (
+        <div className="text-xs mt-1 font-medium text-black">
+          ${Number(spending).toFixed(2)}
+        </div>
+      )}
     </div>
   );
 };

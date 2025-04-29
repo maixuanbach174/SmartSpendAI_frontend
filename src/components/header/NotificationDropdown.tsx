@@ -1,43 +1,82 @@
 // NotificationDropdownFinance.tsx
 "use client";
-import Image from "next/image";
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Dropdown } from "../ui/dropdown/Dropdown";
 import { DropdownItem } from "../ui/dropdown/DropdownItem";
 import { ArrowDownIcon, ArrowUpIcon } from "../../icons/index";
 import Link from "next/link";
 
-// Sample financial notifications
-const sampleNotifications = [
-  {
-    id: 1,
-    type: "expense",
-    amount: 45.67,
-    category: "Groceries",
-    icon: '🛒',
-    time: "5 min ago",
-  },
-  {
-    id: 2,
-    type: "income",
-    amount: 1500,
-    category: "Salary",
-    icon: '💰',
-    time: "1 hr ago",
-  },
-  {
-    id: 3,
-    type: "expense",
-    amount: 89.12,
-    category: "Utilities",
-    icon: '🔌',
-    time: "Yesterday",
-  },
+// Notification type
+interface Notification {
+  id: number;
+  type: "expense" | "income";
+  amount: number;
+  category: string;
+  icon: string;
+  time: string;
+}
+
+// Pools for expense and revenue categories
+const expenseCategories = [
+  { category: "Groceries", icon: "🛒" },
+  { category: "Dining", icon: "🍽️" },
+  { category: "Transport", icon: "🚕" },
+  { category: "Utilities", icon: "🔌" },
+  { category: "Shopping", icon: "🛍️" },
 ];
+const revenueCategories = [
+  { category: "Salary", icon: "💰" },
+  { category: "Stocks", icon: "📈" },
+  { category: "Crypto", icon: "🪙" },
+  { category: "Dividends", icon: "💵" },
+];
+const timeOptions = [
+  "5 min ago",
+  "15 min ago",
+  "30 min ago",
+  "1 hr ago",
+  "2 hrs ago",
+  "Yesterday",
+  "2 days ago",
+];
+
+// Utility to generate random integer
+function randomInt(min: number, max: number) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+// Generate a diverse set of notifications
+function generateNotifications(count: number): Notification[] {
+  const list: Notification[] = [];
+  for (let i = 0; i < count; i++) {
+    const isExpense = Math.random() < 0.7; // 70% chance expense
+    const pool = isExpense ? expenseCategories : revenueCategories;
+    const { category, icon } = pool[randomInt(0, pool.length - 1)];
+    const amount = parseFloat(
+      (
+        Math.random() * (isExpense ? 200 : 3000) +
+        (isExpense ? 5 : 1000)
+      ).toFixed(2)
+    );
+    const time = timeOptions[randomInt(0, timeOptions.length - 1)];
+    list.push({
+      id: Date.now() + i,
+      type: isExpense ? "expense" : "income",
+      amount,
+      category,
+      icon,
+      time,
+    });
+  }
+  return list;
+}
 
 export default function NotificationDropdown() {
   const [isOpen, setIsOpen] = useState(false);
   const [notifying, setNotifying] = useState(true);
+
+  // Generate 8 notifications on mount
+  const sampleNotifications = useMemo(() => generateNotifications(8), []);
 
   function toggleDropdown() {
     setIsOpen(!isOpen);
@@ -77,7 +116,6 @@ export default function NotificationDropdown() {
         </div>
         <ul className="space-y-2">
           {sampleNotifications.map((n) => {
-            const Icon = n.icon;
             const isExpense = n.type === "expense";
             return (
               <DropdownItem
@@ -85,21 +123,24 @@ export default function NotificationDropdown() {
                 onItemClick={() => setIsOpen(false)}
                 className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition"
               >
-                {/* Category Icon */}
                 <div className="flex-shrink-0 p-2 bg-gray-100 rounded-full dark:bg-gray-800">
-                  <span className={`w-5 h-5 flex items-center justify-center ${isExpense ? 'text-red-500' : 'text-green-500'}`}>
-                    {Icon}
+                  <span
+                    className={`w-5 h-5 flex items-center justify-center ${
+                      isExpense ? "text-red-500" : "text-green-500"
+                    }`}
+                  >
+                    {n.icon}
                   </span>
                 </div>
-                {/* Details */}
                 <div className="flex-1">
                   <p className="text-sm text-gray-700 dark:text-gray-300">
                     {isExpense ? (
-                      <><ArrowDownIcon className="inline w-4 h-4 text-red-500 mr-1 align-text-bottom"/> </>
+                      <ArrowDownIcon className="inline w-4 h-4 text-red-500 mr-1 align-text-bottom" />
                     ) : (
-                      <><ArrowUpIcon className="inline w-4 h-4 text-green-500 mr-1 align-text-bottom"/> </>
+                      <ArrowUpIcon className="inline w-4 h-4 text-green-500 mr-1 align-text-bottom" />
                     )}
-                    <span className="font-medium">${n.amount.toFixed(2)}</span> on <span className="font-medium">{n.category}</span>
+                    <span className="font-medium">${n.amount.toFixed(2)}</span> on{' '}
+                    <span className="font-medium">{n.category}</span>
                   </p>
                   <p className="text-xs text-gray-400 mt-1">{n.time}</p>
                 </div>

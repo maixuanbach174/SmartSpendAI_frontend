@@ -65,7 +65,7 @@ const Login: React.FC = () => {
         <div className="w-full max-w-md">
           <div className="flex flex-col items-center mb-6">
             <Image
-              src="/images/logo/logo.svg"
+              src="./images/logo/logo.svg"
               alt="SmartSpendAI Logo"
               width={100}
               height={100}

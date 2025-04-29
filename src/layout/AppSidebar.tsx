@@ -12,6 +12,7 @@ import {
   HorizontaLDots,
   ListIcon,
   PageIcon,
+  PieChartIcon,
   PlugInIcon,
   TableIcon,
   UserCircleIcon,
@@ -40,6 +41,12 @@ const navItems: NavItem[] = [
     name: "User Profile",
     path: "/profile",
   },
+  {
+    icon: <PieChartIcon />,
+    name: "Analytics",
+    path: "/analytics",
+  },
+
 
   {
     name: "Forms",
