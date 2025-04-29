@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import TransactionItem from "./TransactionItem";
 import { transactions, TransactionType } from "../../data/transactions";
+import DatePicker from "react-datepicker";
 
 const filters: { label: string; value: TransactionType }[] = [
   { label: "All", value: "all" },
@@ -12,6 +13,7 @@ const filters: { label: string; value: TransactionType }[] = [
 
 const TransactionList: React.FC = () => {
   const [filter, setFilter] = useState<TransactionType>("all");
+  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date(Date.now()));
 
   const filteredTransactions = transactions.filter(
     (t) => filter === "all" || t.type === filter
@@ -19,8 +21,18 @@ const TransactionList: React.FC = () => {
 
   return (
     <div className="bg-white shadow-md rounded-xl p-6 max-w-md w-full">
+      
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-semibold text-gray-800">Recent Transaction</h2>
+        <DatePicker
+                  selected={selectedDate}
+                  onChange={(date) => setSelectedDate(date as Date)}
+                  dateFormat="MM/yyyy"
+                  showMonthYearPicker
+                  showFullMonthYearPicker
+                  className="bg-gray-200 max-w-20 text-black text-sm px-3 py-1.5 rounded-full transition duration-200 cursor-pointer focus:outline-none"
+                  calendarClassName="!z-[60]"
+                />
         <button className="text-sm text-blue-500 hover:underline">View All</button>
       </div>
 
