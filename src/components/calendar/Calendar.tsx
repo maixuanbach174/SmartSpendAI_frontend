@@ -24,20 +24,22 @@ const Calendar: React.FC = () => {
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(
     null
   );
+
+  type CalendarEventType = 'Transportation' | 'Food' | 'Personal' | 'Others';
   const [eventTitle, setEventTitle] = useState("");
   const [eventSpending, setEventSpending] = useState<number>(0);  const [eventStartDate, setEventStartDate] = useState("");
   const [eventEndDate, setEventEndDate] = useState("");
-  const [eventLevel, setEventLevel] = useState("");
+  const [eventLevel, setEventLevel] = useState<CalendarEventType | ''>("");
   const [eventSchedule, setEventSchedule] = useState("none");
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const calendarRef = useRef<FullCalendar>(null);
   const { isOpen, openModal, closeModal } = useModal();
 
   const calendarsEvents = {
-    Danger: "danger",
-    Success: "success",
-    Primary: "primary",
-    Warning: "warning",
+    Transportation: "danger",
+    Food: "success",
+    Personal: "primary",
+    Others: "warning",
   };
 
   useEffect(() => {
@@ -77,8 +79,8 @@ const Calendar: React.FC = () => {
     setSelectedEvent(event as unknown as CalendarEvent);
     setEventTitle(event.title);
     setEventSpending(event.extendedProps.spend);
-    setEventStartDate(event.start?.toISOString().split("T")[0] || "");
-    setEventEndDate(event.end?.toISOString().split("T")[0] || "");
+    setEventStartDate(event.startStr || event.start?.toISOString().split('T')[0] || '');
+    setEventEndDate(event.endStr || event.end?.toISOString().split('T')[0] || event.startStr || event.start?.toISOString().split('T')[0] || '');
     setEventSchedule(event.extendedProps.schedule || "none");
     setEventLevel(event.extendedProps.calendar);
     openModal();
@@ -96,8 +98,7 @@ const Calendar: React.FC = () => {
                 spending: eventSpending,
                 start: eventStartDate,
                 end: eventEndDate,
-                schedule: eventSchedule,
-                extendedProps: { calendar: eventLevel, spend: eventSpending },
+                extendedProps: { calendar: eventLevel ? calendarsEvents[eventLevel as CalendarEventType] : 'Others', spend: eventSpending },
               }
             : event
         )
@@ -112,7 +113,7 @@ const Calendar: React.FC = () => {
         end: eventEndDate,
         schedule: eventSchedule,
         allDay: true,
-        extendedProps: { calendar: eventLevel, spend: eventSpending },
+        extendedProps: { calendar: eventLevel ? calendarsEvents[eventLevel as CalendarEventType] : 'Others', spend: eventSpending },
       };
       setEvents((prevEvents) => [...prevEvents, newEvent]);
     }
@@ -235,7 +236,7 @@ const Calendar: React.FC = () => {
                             value={key}
                             id={`modal${key}`}
                             checked={eventLevel === key}
-                            onChange={() => setEventLevel(key)}
+                            onChange={() => setEventLevel(key as CalendarEventType)}
                           />
                           <span className="flex items-center justify-center w-5 h-5 mr-2 border border-gray-300 rounded-full box dark:border-gray-700">
                             <span
