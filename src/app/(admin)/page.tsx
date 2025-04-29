@@ -6,6 +6,7 @@ import MonthlySalesChart from "@/components/ecommerce/MonthlySalesChart";
 import StatisticsChart from "@/components/ecommerce/StatisticsChart";
 import RecentOrders from "@/components/ecommerce/RecentOrders";
 import DemographicCard from "@/components/ecommerce/DemographicCard";
+import TransactionList from "@/components/ecommerce/TransactionList";
 
 export const metadata: Metadata = {
   title:
@@ -16,11 +17,20 @@ export const metadata: Metadata = {
 export default function Ecommerce() {
   return (
     <div className="grid grid-cols-12 gap-4 md:gap-6">
-      <div className="col-span-12 space-y-6 xl:col-span-7">
-        <EcommerceMetrics />
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-1 col-span-12 xl:col-span-5">
+        {/* Left: Transaction List (2/3 width) */}
+        <div className="md:col-span-3">
+          <TransactionList />
+        </div>
 
-        <MonthlySalesChart />
+        {/* Right: Metrics (1/3 width) */}
+        <div className="md:col-span-2">
+          <EcommerceMetrics />
+        </div>
       </div>
+
+
+     
 
       <div className="col-span-12 xl:col-span-5">
         <MonthlyTarget />
@@ -29,14 +39,14 @@ export default function Ecommerce() {
       <div className="col-span-12">
         <StatisticsChart />
       </div>
-
+{/* 
       <div className="col-span-12 xl:col-span-5">
         <DemographicCard />
       </div>
 
       <div className="col-span-12 xl:col-span-7">
         <RecentOrders />
-      </div>
+      </div> */}
     </div>
   );
 }
