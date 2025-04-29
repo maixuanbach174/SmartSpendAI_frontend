@@ -206,7 +206,6 @@ const Calendar: React.FC = () => {
     setEventType(mockAIEvent.type as CalendarEventType);
     setEventSchedule("none");
     setSelectedEvent(null);
-    console.log(eventStartDate);
   };
 
   // Function to handle recording stop
