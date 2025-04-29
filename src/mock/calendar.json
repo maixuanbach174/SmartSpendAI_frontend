@@ -1,0 +1,513 @@
+[{
+        "id": 1,
+        "title": "Netflix",
+        "spending": 20,
+        "start": "04/01/2025",
+        "end": "04/01/2025",
+        "type": "Personal"
+    },
+    {
+        "id": 2,
+        "title": "Metro",
+        "spending": 4,
+        "start": "04/01/2025",
+        "end": "04/01/2025",
+        "type": "Transportation"
+    },
+    {
+        "id": 3,
+        "title": "Groceries",
+        "spending": 50,
+        "start": "04/01/2025",
+        "end": "04/01/2025",
+        "type": "Food"
+    },
+    {
+        "id": 4,
+        "title": "Rent",
+        "spending": 1000,
+        "start": "04/02/2025",
+        "end": "04/02/2025",
+        "type": "Personal"
+    },
+    {
+        "id": 5,
+        "title": "Utilities",
+        "spending": 200,
+        "start": "04/02/2025",
+        "end": "04/02/2025",
+        "type": "Personal"
+    },
+    {
+        "id": 6,
+        "title": "Gym Membership",
+        "spending": 30,
+        "start": "04/02/2025",
+        "end": "04/02/2025",
+        "type": "Personal"
+    },
+    {
+        "id": 7,
+        "title": "Dining Out",
+        "spending": 80,
+        "start": "04/03/2025",
+        "end": "04/03/2025",
+        "type": "Food"
+    },
+    {
+        "id": 8,
+        "title": "Car Insurance",
+        "spending": 150,
+        "start": "04/03/2025",
+        "end": "04/03/2025",
+        "type": "Transportation"
+    },
+    {
+        "id": 9,
+        "title": "Internet",
+        "spending": 60,
+        "start": "04/03/2025",
+        "end": "04/03/2025",
+        "type": "Personal"
+    },
+    {
+        "id": 10,
+        "title": "Coffee",
+        "spending": 5,
+        "start": "04/04/2025",
+        "end": "04/04/2025",
+        "type": "Food"
+    },
+    {
+        "id": 11,
+        "title": "Public Transport",
+        "spending": 10,
+        "start": "04/04/2025",
+        "end": "04/04/2025",
+        "type": "Transportation"
+    },
+    {
+        "id": 12,
+        "title": "Movie Tickets",
+        "spending": 25,
+        "start": "04/05/2025",
+        "end": "04/05/2025",
+        "type": "Personal"
+    },
+    {
+        "id": 13,
+        "title": "Concert Tickets",
+        "spending": 75,
+        "start": "04/05/2025",
+        "end": "04/05/2025",
+        "type": "Personal"
+    },
+    {
+        "id": 14,
+        "title": "Books",
+        "spending": 15,
+        "start": "04/06/2025",
+        "end": "04/06/2025",
+        "type": "Personal"
+    },
+    {
+        "id": 15,
+        "title": "Clothing",
+        "spending": 100,
+        "start": "04/06/2025",
+        "end": "04/06/2025",
+        "type": "Personal"
+    },
+    {
+        "id": 16,
+        "title": "Gas",
+        "spending": 40,
+        "start": "04/07/2025",
+        "end": "04/07/2025",
+        "type": "Transportation"
+    },
+    {
+        "id": 17,
+        "title": "Snacks",
+        "spending": 10,
+        "start": "04/07/2025",
+        "end": "04/07/2025",
+        "type": "Food"
+    },
+    {
+        "id": 18,
+        "title": "PhoneBill",
+        "spending": 50,
+        "start": "04/08/2025",
+        "end": "04/08/2025",
+        "type": "Personal"
+    },
+    {
+        "id": 19,
+        "title": "Takeout",
+        "spending": 30,
+        "start": "04/08/2025",
+        "end": "04/08/2025",
+        "type": "Food"
+    },
+    {
+        "id": 20,
+        "title": "Streaming Service",
+        "spending": 15,
+        "start": "04/09/2025",
+        "end": "04/09/2025",
+        "type": "Personal"
+    },
+    {
+        "id": 21,
+        "title": "Taxi",
+        "spending": 20,
+        "start": "04/09/2025",
+        "end": "04/09/2025",
+        "type": "Transportation"
+    },
+    {
+        "id": 22,
+        "title": "Lunch",
+        "spending": 12,
+        "start": "04/10/2025",
+        "end": "04/10/2025",
+        "type": "Food"
+    },
+    {
+        "id": 23,
+        "title": "Dinner",
+        "spending": 25,
+        "start": "04/10/2025",
+        "end": "04/10/2025",
+        "type": "Food"
+    },
+    {
+        "id": 24,
+        "title": "Groceries",
+        "spending": 50,
+        "start": "04/11/2025",
+        "end": "04/11/2025",
+        "type": "Food"
+    },
+    {
+        "id": 25,
+        "title": "Shopping",
+        "spending": 200,
+        "start": "04/11/2025",
+        "end": "04/11/2025",
+        "type": "Personal"
+    },
+    {
+        "id": 26,
+        "title": "Car Maintenance",
+        "spending": 100,
+        "start": "04/12/2025",
+        "end": "04/12/2025",
+        "type": "Transportation"
+    },
+    {
+        "id": 27,
+        "title": "Pet Supplies",
+        "spending": 40,
+        "start": "04/12/2025",
+        "end": "04/12/2025",
+        "type": "Personal"
+    },
+    {
+        "id": 28,
+        "title": "Gifts",
+        "spending": 60,
+        "start": "04/13/2025",
+        "end": "04/13/2025",
+        "type": "Personal"
+    },
+    {
+        "id": 29,
+        "title": "Travel",
+        "spending": 500,
+        "start": "04/13/2025",
+        "end": "04/13/2025",
+        "type": "Personal"
+    },
+    {
+        "id": 30,
+        "title": "Emergency Fund",
+        "spending": 200,
+        "start": "04/14/2025",
+        "end": "04/14/2025",
+        "type": "Personal"
+    },
+    {
+        "id": 31,
+        "title": "Savings",
+        "spending": 300,
+        "start": "04/14/2025",
+        "end": "04/14/2025",
+        "type": "Personal"
+    },
+    {
+        "id": 32,
+        "title": "Investments",
+        "spending": 400,
+        "start": "04/15/2025",
+        "end": "04/15/2025",
+        "type": "Personal"
+    },
+    {
+        "id": 33,
+        "title": "Metro",
+        "spending": 100,
+        "start": "04/15/2025",
+        "end": "04/15/2025",
+        "type": "Personal"
+    },
+    {
+        "id": 34,
+        "title": "Lunch",
+        "spending": 20,
+        "start": "04/16/2025",
+        "end": "04/16/2025",
+        "type": "Food"
+    },
+    {
+        "id": 35,
+        "title": "Dinner",
+        "spending": 30,
+        "start": "04/16/2025",
+        "end": "04/16/2025",
+        "type": "Food"
+    },
+    {
+        "id": 36,
+        "title": "Snacks",
+        "spending": 10,
+        "start": "04/17/2025",
+        "end": "04/17/2025",
+        "type": "Food"
+    },
+    {
+        "id": 37,
+        "title": "Groceries",
+        "spending": 50,
+        "start": "04/17/2025",
+        "end": "04/17/2025",
+        "type": "Food"
+    },
+    {
+        "id": 38,
+        "title": "Utilities",
+        "spending": 200,
+        "start": "04/18/2025",
+        "end": "04/18/2025",
+        "type": "Others"
+    },
+    {
+        "id": 39,
+        "title": "Rent",
+        "spending": 1000,
+        "start": "04/18/2025",
+        "end": "04/18/2025",
+        "type": "Personal"
+    },
+    {
+        "id": 40,
+        "title": "Car Insurance",
+        "spending": 150,
+        "start": "04/19/2025",
+        "end": "04/19/2025",
+        "type": "Transportation"
+    },
+    {
+        "id": 41,
+        "title": "Gas",
+        "spending": 40,
+        "start": "04/19/2025",
+        "end": "04/19/2025",
+        "type": "Transportation"
+    },
+    {
+        "id": 42,
+        "title": "Public Transport",
+        "spending": 10,
+        "start": "04/20/2025",
+        "end": "04/20/2025",
+        "type": "Transportation"
+    },
+    {
+        "id": 43,
+        "title": "Taxi",
+        "spending": 20,
+        "start": "04/20/2025",
+        "end": "04/20/2025",
+        "type": "Transportation"
+    },
+    {
+        "id": 44,
+        "title": "Coffee",
+        "spending": 5,
+        "start": "04/21/2025",
+        "end": "04/21/2025",
+        "type": "Food"
+    },
+    {
+        "id": 45,
+        "title": "Takeout",
+        "spending": 30,
+        "start": "04/21/2025",
+        "end": "04/21/2025",
+        "type": "Food"
+    },
+    {
+        "id": 46,
+        "title": "Streaming Service",
+        "spending": 15,
+        "start": "04/22/2025",
+        "end": "04/22/2025",
+        "type": "Personal"
+    },
+    {
+        "id": 47,
+        "title": "Gym Membership",
+        "spending": 30,
+        "start": "04/22/2025",
+        "end": "04/22/2025",
+        "type": "Personal"
+    },
+    {
+        "id": 48,
+        "title": "Dining Out",
+        "spending": 80,
+        "start": "04/23/2025",
+        "end": "04/23/2025",
+        "type": "Food"
+    },
+    {
+        "id": 49,
+        "title": "Snacks",
+        "spending": 10,
+        "start": "04/23/2025",
+        "end": "04/23/2025",
+        "type": "Food"
+    },
+    {
+        "id": 50,
+        "title": "Lunch",
+        "spending": 12,
+        "start": "04/24/2025",
+        "end": "04/24/2025",
+        "type": "Food"
+    },
+    {
+        "id": 51,
+        "title": "Dinner",
+        "spending": 25,
+        "start": "04/24/2025",
+        "end": "04/24/2025",
+        "type": "Food"
+    },
+    {
+        "id": 52,
+        "title": "Groceries",
+        "spending": 50,
+        "start": "04/25/2025",
+        "end": "04/25/2025",
+        "type": "Food"
+    },
+    {
+        "id": 53,
+        "title": "Shopping",
+        "spending": 200,
+        "start": "04/25/2025",
+        "end": "04/25/2025",
+        "type": "Personal"
+    },
+    {
+        "id": 54,
+        "title": "Car Maintenance",
+        "spending": 100,
+        "start": "04/26/2025",
+        "end": "04/26/2025",
+        "type": "Transportation"
+    },
+    {
+        "id": 55,
+        "title": "Pet Supplies",
+        "spending": 40,
+        "start": "04/26/2025",
+        "end": "04/26/2025",
+        "type": "Others"
+    },
+    {
+        "id": 56,
+        "title": "Gifts",
+        "spending": 60,
+        "start": "04/27/2025",
+        "end": "04/27/2025",
+        "type": "Personal"
+    },
+    {
+        "id": 57,
+        "title": "Travel",
+        "spending": 500,
+        "start": "04/27/2025",
+        "end": "04/27/2025",
+        "type": "Personal"
+    },
+    {
+        "id": 58,
+        "title": "Emergency Fund",
+        "spending": 200,
+        "start": "04/28/2025",
+        "end": "04/28/2025",
+        "type": "Others"
+    },
+    {
+        "id": 59,
+        "title": "Savings",
+        "spending": 300,
+        "start": "04/28/2025",
+        "end": "04/28/2025",
+        "type": "Others"
+    },
+    {
+        "id": 60,
+        "title": "Spotify",
+        "spending": 20,
+        "start": "04/29/2025",
+        "end": "04/29/2025",
+        "type": "Personal"
+    },
+    {
+        "id": 61,
+        "title": "Investments",
+        "spending": 400,
+        "start": "04/29/2025",
+        "end": "04/29/2025",
+        "type": "Others"
+    },
+    {
+        "id": 62,
+        "title": "Metro",
+        "spending": 100,
+        "start": "04/30/2025",
+        "end": "04/30/2025",
+        "type": "Personal"
+    },
+    {
+        "id": 63,
+        "title": "Lunch",
+        "spending": 20,
+        "start": "04/30/2025",
+        "end": "04/30/2025",
+        "type": "Food"
+    },
+    {
+        "id": 64,
+        "title": "Dinner",
+        "spending": 30,
+        "start": "04/30/2025",
+        "end": "04/30/2025",
+        "type": "Food"
+    }
+]

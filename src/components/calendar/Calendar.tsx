@@ -15,6 +15,8 @@ import { Modal } from "@/components/ui/modal";
 
 import { MicroPhoneIcon } from "@/icons";
 
+import { CalendarData } from "@/mock";
+
 interface CalendarEvent extends EventInput {
   extendedProps: {
     calendar: string;
@@ -31,7 +33,7 @@ const Calendar: React.FC = () => {
   const [eventTitle, setEventTitle] = useState("");
   const [eventSpending, setEventSpending] = useState<number>(0);  const [eventStartDate, setEventStartDate] = useState("");
   const [eventEndDate, setEventEndDate] = useState("");
-  const [eventLevel, setEventLevel] = useState<CalendarEventType | ''>("");
+  const [eventType, setEventType] = useState<CalendarEventType | ''>("");
   const [eventSchedule, setEventSchedule] = useState("none");
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const calendarRef = useRef<FullCalendar>(null);
@@ -49,27 +51,16 @@ const Calendar: React.FC = () => {
 
   useEffect(() => {
     // Initialize with some events
-    setEvents([
-      {
-        id: "1",
-        title: "Event Conf.",
-        start: new Date().toISOString().split("T")[0],
-        extendedProps: { calendar: "Danger", spend: 100 },
+    const mappedEvents = CalendarData.map((event) => ({
+      id: event.id.toString(),
+      title: event.title,
+      start: new Date(event.start || "").toISOString(),
+      extendedProps: {
+        calendar: calendarsEvents[event.type as CalendarEventType],
+        spend: event.spending,
       },
-      {
-        id: "2",
-        title: "Meeting",
-        start: new Date(Date.now() + 86400000).toISOString().split("T")[0],
-        extendedProps: { calendar: "Success", spend: 50 },
-      },
-      {
-        id: "3",
-        title: "Workshop",
-        start: new Date(Date.now() + 172800000).toISOString().split("T")[0],
-        end: new Date(Date.now() + 259200000).toISOString().split("T")[0],
-        extendedProps: { calendar: "Primary", spend: 20 },
-      },
-    ]);
+    }));
+    setEvents(mappedEvents);
   }, []);
 
   const handleDateSelect = (selectInfo: DateSelectArg) => {
@@ -87,7 +78,7 @@ const Calendar: React.FC = () => {
     setEventStartDate(event.startStr || event.start?.toISOString().split('T')[0] || '');
     setEventEndDate(event.endStr || event.end?.toISOString().split('T')[0] || event.startStr || event.start?.toISOString().split('T')[0] || '');
     setEventSchedule(event.extendedProps.schedule || "none");
-    setEventLevel(event.extendedProps.calendar);
+    setEventType(event.extendedProps.calendar);
     openModal();
   };
 
@@ -103,7 +94,7 @@ const Calendar: React.FC = () => {
                 spending: eventSpending,
                 start: eventStartDate,
                 end: eventEndDate,
-                extendedProps: { calendar: eventLevel ? calendarsEvents[eventLevel as CalendarEventType] : 'Others', spend: eventSpending },
+                extendedProps: { calendar: eventType ? calendarsEvents[eventType as CalendarEventType] : 'Others', spend: eventSpending },
               }
             : event
         )
@@ -118,7 +109,7 @@ const Calendar: React.FC = () => {
         end: eventEndDate,
         schedule: eventSchedule,
         allDay: true,
-        extendedProps: { calendar: eventLevel ? calendarsEvents[eventLevel as CalendarEventType] : 'Others', spend: eventSpending },
+        extendedProps: { calendar: eventType ? calendarsEvents[eventType as CalendarEventType] : 'Others', spend: eventSpending },
       };
       setEvents((prevEvents) => [...prevEvents, newEvent]);
     }
@@ -132,7 +123,7 @@ const Calendar: React.FC = () => {
     setEventStartDate("");
     setEventEndDate("");
     setEventSchedule("none");
-    setEventLevel("");
+    setEventType("");
     setSelectedEvent(null);
   };
 
@@ -201,7 +192,7 @@ const Calendar: React.FC = () => {
 
   return (
     <div className="rounded-2xl border  border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
-      <div className="custom-calendar">
+      <div className="custom-calendar hide-scrollbar">
         <FullCalendar
           ref={calendarRef}
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
@@ -293,13 +284,13 @@ const Calendar: React.FC = () => {
                             name="event-level"
                             value={key}
                             id={`modal${key}`}
-                            checked={eventLevel === key}
-                            onChange={() => setEventLevel(key as CalendarEventType)}
+                            checked={eventType === key}
+                            onChange={() => setEventType(key as CalendarEventType)}
                           />
                           <span className="flex items-center justify-center w-5 h-5 mr-2 border border-gray-300 rounded-full box dark:border-gray-700">
                             <span
                               className={`h-2 w-2 rounded-full bg-white ${
-                                eventLevel === key ? "block" : "hidden"
+                                eventType === key ? "block" : "hidden"
                               }`}  
                             ></span>
                           </span>
@@ -399,8 +390,12 @@ const renderEventContent = (eventInfo: EventContentArg) => {
     >
       <div className="flex">
         <div className="fc-daygrid-event-dot"></div>
-        <div className="fc-event-time">{eventInfo.timeText}</div>
-        <div className="fc-event-title">{eventInfo.event.title}</div>
+        {/* <div className="fc-event-time">{eventInfo.timeText}</div> */}
+        <div className="fc-event-title break-words whitespace-normal overflow-wrap-anywhere" style={{ 
+          overflow: "hidden", 
+          maxHeight: "3rem",
+          lineHeight: "1rem"
+        }}>{eventInfo.event.title}</div>
       </div>
       {spending !== undefined && (
         <div className="text-xs mt-1 font-medium text-black">
